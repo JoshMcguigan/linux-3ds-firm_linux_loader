@@ -18,7 +18,7 @@ CFLAGS	= -Wall -Os -fno-builtin $(ARCH) $(INCLUDE) -fno-stack-protector
 all: $(TARGET).elf
 
 $(TARGET).elf: $(OBJS)
-	$(CC) -T link.ld -Wl,--nmagic $^ -o $@ -nostartfiles -specs=nano.specs -specs=nosys.specs
+	$(CC) -T link.ld -Wl,--nmagic $^ -o $@ -nostartfiles -static-libgcc -Wl,--no-dynamic-linker
 %.o: %.c
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 %.o: %.S
