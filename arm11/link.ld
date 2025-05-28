@@ -14,5 +14,5 @@ SECTIONS
 
 	. = ALIGN(4);
 
-	__end__ = ABSOLUTE(.);
+	end = ABSOLUTE(.);
 }

@@ -40,7 +40,6 @@ _start:
 
 	ldr r0, =SYNC_ADDR
 	mov r1, #0
-	str r1, [r0]
 	str r1, [r0, #4]
 	str r1, [r0, #8]
 	str r1, [r0, #12]
@@ -136,10 +135,6 @@ _start:
 	@ Select framebuffer 0
 	mov r1, #0
 	str r1, [r0, #LCD_FB_SELECT_OFFSET]
-	
-	ldr r0, =SYNC_ADDR
-	mov r1, #SYNC_FB_RDY
-	str r1, [r0]
 
 	@@@@@ Jump to the kernel @@@@@
 	
@@ -150,15 +145,7 @@ wait_arm9:
 	cmp r1, #SYNC_BOOT_RDY
 	bne wait_arm9
 
-	@ Setup the registers before
-	@ jumping to the kernel entry
-	mov r0, #0
-	ldr r1, =MACHINE_NUMBER
-	ldr r2, =DTB_ADDR
-	ldr lr, =ZIMAGE_ADDR
-
-	@ Jump to the kernel!
-	bx lr
+	blx main
 
 smp_start:
 	@ Get the CPUID

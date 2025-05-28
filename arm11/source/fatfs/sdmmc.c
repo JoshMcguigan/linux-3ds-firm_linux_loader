@@ -559,7 +559,8 @@ int sdmmc_get_cid(bool isNand, uint32_t *info)
 int sdmmc_sdcard_init()
 {
 	InitSD();
-	int nand_res = Nand_Init();
+	// had to remove nand for arm11, idk why
+	int nand_res = 0;
 	int sd_res = SD_Init();
 	return nand_res | sd_res;
 }

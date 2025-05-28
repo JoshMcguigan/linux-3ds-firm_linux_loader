@@ -59,20 +59,14 @@ _start:
 
 	@ Fixes mounting of SDMC
 	ldr r0, =0x10000020
-	mov r1, #0x340
+	mov r1, #0x40
+	str r1, [r0]
+
+	ldr r0, =SYNC_ADDR
+	mov r1, #SYNC_BOOT_RDY
 	str r1, [r0]
 	
-	@ wait for arm11
-	ldr r0, =SYNC_ADDR
-wait_arm11:
-	ldr r1, [r0]
-	cmp r1, #SYNC_FB_RDY
-	bne wait_arm11
-
-	@@@ Jump to main @@@
-
-	mov r0, r9
-	mov r1, r10
-	blx main
+halt:
+	b halt
 
 	.ltorg
