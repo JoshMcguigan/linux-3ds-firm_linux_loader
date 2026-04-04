@@ -7,6 +7,7 @@
 #include "hid.h"
 #include "i2c.h"
 #include "linux_config.h"
+#include "ntrcard.h"
 
 __attribute__((noreturn))
 static void mcu_poweroff()
@@ -50,6 +51,19 @@ static int load_file(const char *filename, uint32_t addr)
 	FileClose();
 
 	return 1;
+}
+
+void InteractWithCartridge() {
+	Debug("Cartridge: init...");
+	ntrcard_init();
+
+	Debug("Cartridge: reading ID...");
+	u32 id = ntrcard_read_id();
+
+	if (id == 0xFFFFFFFF || id == 0x00000000)
+		DebugColor(COLOR_RED, "Cartridge: no response (ID: %08X)", id);
+	else
+		Debug("Cartridge ID: %08X", id);
 }
 
 int main(int argc, char *argv[])
@@ -98,6 +112,8 @@ int main(int argc, char *argv[])
 	flushCaches();
 
 	DeinitFS();
+
+	InteractWithCartridge();
 
 	/* Make the ARM11 jump to the Linux payload */
 	*(vu32 *)SYNC_ADDR = SYNC_BOOT_RDY;
